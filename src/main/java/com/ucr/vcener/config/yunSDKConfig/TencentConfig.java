@@ -2,6 +2,7 @@ package com.ucr.vcener.config.yunSDKConfig;
 
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.cvm.v20170312.CvmClient;
+import lombok.Data;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -13,8 +14,9 @@ import org.springframework.stereotype.Component;
  * @date 2020/11/27 11:04
  */
 @Component
+@Data
 public class TencentConfig {
-    public CvmClient cvmClient;
+    private CvmClient cvmClient;
 
     /**
      * 获取腾讯云连接对象
