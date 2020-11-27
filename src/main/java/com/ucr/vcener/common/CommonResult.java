@@ -41,6 +41,13 @@ public class CommonResult<T> {
         return r;
     }
 
+    public static CommonResult error(String msg) {
+        CommonResult<Object> r = new CommonResult<>();
+        r.setCode("444");
+        r.setMsg(msg);
+        return r;
+    }
+
     public static CommonResult ok(Object object) {
         CommonResult r = new CommonResult();
         r.setData(object);
