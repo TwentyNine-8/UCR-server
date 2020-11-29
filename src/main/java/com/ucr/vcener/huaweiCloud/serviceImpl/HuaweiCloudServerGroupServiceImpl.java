@@ -6,22 +6,22 @@ import com.huaweicloud.sdk.core.exception.ServiceResponseException;
 import com.huaweicloud.sdk.ecs.v2.model.*;
 import com.ucr.vcener.common.CommonResult;
 import com.ucr.vcener.config.yunSDKConfig.HuaweiConfig;
-import com.ucr.vcener.huaweiCloud.service.HuaweiCloudSecurityGroupService;
+import com.ucr.vcener.huaweiCloud.service.HuaweiCloudServerGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class HuaweiCloudSecurityGroupServiceImpl implements HuaweiCloudSecurityGroupService {
+public class HuaweiCloudServerGroupServiceImpl implements HuaweiCloudServerGroupService {
     @Autowired
     private HuaweiConfig huaweiConfig;
 
     /**
-     * 添加安全组
+     * 云服务器组添加成员
      *
      */
     @Override
-    public CommonResult NovaAssociateSecurityGroup() {
-        NovaAssociateSecurityGroupRequest request = new NovaAssociateSecurityGroupRequest();
+    public CommonResult AddServerGroupMember() {
+        AddServerGroupMemberRequest request = new AddServerGroupMemberRequest();
         try {
-            NovaAssociateSecurityGroupResponse response = huaweiConfig.getClient().novaAssociateSecurityGroup(request);
+            AddServerGroupMemberResponse response = huaweiConfig.getClient().addServerGroupMember(request);
             return CommonResult.ok(response);
         } catch (ConnectionException e) {
             e.printStackTrace();
@@ -34,14 +34,14 @@ public class HuaweiCloudSecurityGroupServiceImpl implements HuaweiCloudSecurityG
     }
 
     /**
-     * 移除安全组
+     * 创建云服务器组
      *
      */
     @Override
-    public CommonResult NovaDisassociateSecurityGroup() {
-        NovaDisassociateSecurityGroupRequest request = new NovaDisassociateSecurityGroupRequest();
+    public CommonResult CreateServerGroup() {
+        CreateServerGroupRequest request = new CreateServerGroupRequest();
         try {
-            NovaDisassociateSecurityGroupResponse response = huaweiConfig.getClient().novaDisassociateSecurityGroup(request);
+            CreateServerGroupResponse response = huaweiConfig.getClient().createServerGroup(request);
             return CommonResult.ok(response);
         } catch (ConnectionException e) {
             e.printStackTrace();
@@ -54,14 +54,34 @@ public class HuaweiCloudSecurityGroupServiceImpl implements HuaweiCloudSecurityG
     }
 
     /**
-     * 查询指定云服务器安全组列表
+     * 删除云服务器组
      *
      */
     @Override
-    public CommonResult NovaListServerSecurityGroups() {
-        NovaListServerSecurityGroupsRequest request = new NovaListServerSecurityGroupsRequest();
+    public CommonResult DeleteServerGroup() {
+        DeleteServerGroupRequest request = new DeleteServerGroupRequest();
         try {
-            NovaListServerSecurityGroupsResponse response = huaweiConfig.getClient().novaListServerSecurityGroups(request);
+            DeleteServerGroupResponse response = huaweiConfig.getClient().deleteServerGroup(request);
+            return CommonResult.ok(response);
+        } catch (ConnectionException e) {
+            e.printStackTrace();
+        } catch (RequestTimeoutException e) {
+            e.printStackTrace();
+        } catch (ServiceResponseException e) {
+            e.printStackTrace();
+        }
+        return CommonResult.error();
+    }
+
+    /**
+     * 云服务器组删除成员
+     *
+     */
+    @Override
+    public CommonResult DeleteServerGroupMember() {
+        DeleteServerGroupMemberRequest request = new DeleteServerGroupMemberRequest();
+        try {
+            DeleteServerGroupMemberResponse response = huaweiConfig.getClient().deleteServerGroupMember(request);
             return CommonResult.ok(response);
         } catch (ConnectionException e) {
             e.printStackTrace();

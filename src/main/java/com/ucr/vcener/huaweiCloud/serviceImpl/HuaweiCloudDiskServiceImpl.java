@@ -7,7 +7,6 @@ import com.huaweicloud.sdk.ecs.v2.model.*;
 import com.ucr.vcener.common.CommonResult;
 import com.ucr.vcener.config.yunSDKConfig.HuaweiConfig;
 import com.ucr.vcener.huaweiCloud.service.HuaweiCloudDiskService;
-import com.ucr.vcener.huaweiCloud.service.HuaweiCloudNetworkService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class HuaweiCloudDiskServiceImpl implements HuaweiCloudDiskService {

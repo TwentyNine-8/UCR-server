@@ -6,22 +6,22 @@ import com.huaweicloud.sdk.core.exception.ServiceResponseException;
 import com.huaweicloud.sdk.ecs.v2.model.*;
 import com.ucr.vcener.common.CommonResult;
 import com.ucr.vcener.config.yunSDKConfig.HuaweiConfig;
-import com.ucr.vcener.huaweiCloud.service.HuaweiCloudSecurityGroupService;
+import com.ucr.vcener.huaweiCloud.service.HuaweiCloudTagService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class HuaweiCloudSecurityGroupServiceImpl implements HuaweiCloudSecurityGroupService {
+public class HuaweiCloudTagServiceImpl implements HuaweiCloudTagService {
     @Autowired
     private HuaweiConfig huaweiConfig;
 
     /**
-     * 添加安全组
+     * 批量添加云服务器标签
      *
      */
     @Override
-    public CommonResult NovaAssociateSecurityGroup() {
-        NovaAssociateSecurityGroupRequest request = new NovaAssociateSecurityGroupRequest();
+    public CommonResult BatchCreateServerTags() {
+        BatchCreateServerTagsRequest request = new BatchCreateServerTagsRequest();
         try {
-            NovaAssociateSecurityGroupResponse response = huaweiConfig.getClient().novaAssociateSecurityGroup(request);
+            BatchCreateServerTagsResponse response = huaweiConfig.getClient().batchCreateServerTags(request);
             return CommonResult.ok(response);
         } catch (ConnectionException e) {
             e.printStackTrace();
@@ -34,14 +34,14 @@ public class HuaweiCloudSecurityGroupServiceImpl implements HuaweiCloudSecurityG
     }
 
     /**
-     * 移除安全组
+     * 批量删除云服务器标签
      *
      */
     @Override
-    public CommonResult NovaDisassociateSecurityGroup() {
-        NovaDisassociateSecurityGroupRequest request = new NovaDisassociateSecurityGroupRequest();
+    public CommonResult BatchDeleteServerTags() {
+        BatchDeleteServerTagsRequest request = new BatchDeleteServerTagsRequest();
         try {
-            NovaDisassociateSecurityGroupResponse response = huaweiConfig.getClient().novaDisassociateSecurityGroup(request);
+            BatchDeleteServerTagsResponse response = huaweiConfig.getClient().batchDeleteServerTags(request);
             return CommonResult.ok(response);
         } catch (ConnectionException e) {
             e.printStackTrace();
@@ -54,14 +54,14 @@ public class HuaweiCloudSecurityGroupServiceImpl implements HuaweiCloudSecurityG
     }
 
     /**
-     * 查询指定云服务器安全组列表
+     * 查询云服务器标签
      *
      */
     @Override
-    public CommonResult NovaListServerSecurityGroups() {
-        NovaListServerSecurityGroupsRequest request = new NovaListServerSecurityGroupsRequest();
+    public CommonResult ShowServerTags() {
+        ShowServerTagsRequest request = new ShowServerTagsRequest();
         try {
-            NovaListServerSecurityGroupsResponse response = huaweiConfig.getClient().novaListServerSecurityGroups(request);
+            ShowServerTagsResponse response = huaweiConfig.getClient().showServerTags(request);
             return CommonResult.ok(response);
         } catch (ConnectionException e) {
             e.printStackTrace();
