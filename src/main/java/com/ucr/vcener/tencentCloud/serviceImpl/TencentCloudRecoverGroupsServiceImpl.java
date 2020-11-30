@@ -1,23 +1,21 @@
 package com.ucr.vcener.tencentCloud.serviceImpl;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.netflix.discovery.converters.Auto;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.cvm.v20170312.models.*;
 import com.ucr.vcener.common.CommonResult;
 import com.ucr.vcener.config.yunSDKConfig.TencentConfig;
-import com.ucr.vcener.tencentCloud.service.DescribeDisasterRecoverGroupsService;
+import com.ucr.vcener.tencentCloud.service.TencentCloudRecoverGroupsService;
 import com.ucr.vcener.util.TencentUtil;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 
 /**
  * @author ymn
  * @date 2020/11/27 17:43
  */
-public class DescribeDisasterRecoverGroupsServiceImpl implements DescribeDisasterRecoverGroupsService {
+public class TencentCloudRecoverGroupsServiceImpl implements TencentCloudRecoverGroupsService {
     @Autowired
     private TencentConfig tencentConfig;
 

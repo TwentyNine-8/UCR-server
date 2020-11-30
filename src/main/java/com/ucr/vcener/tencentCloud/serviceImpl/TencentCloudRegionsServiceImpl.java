@@ -4,17 +4,15 @@ import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.cvm.v20170312.models.*;
 import com.ucr.vcener.common.CommonResult;
 import com.ucr.vcener.config.yunSDKConfig.TencentConfig;
-import com.ucr.vcener.tencentCloud.service.TencentCloudDescribeService;
+import com.ucr.vcener.tencentCloud.service.TencentCloudRegionsService;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author ymn
  * @date 2020/11/27 10:20
  */
-public class TencentCloudDescribeServiceImpl implements TencentCloudDescribeService {
+public class TencentCloudRegionsServiceImpl implements TencentCloudRegionsService {
     @Autowired
     private TencentConfig tencentConfig;
 

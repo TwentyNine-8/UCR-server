@@ -9,7 +9,7 @@ import java.util.Map;
  * @author ymn
  * @date 2020/11/27 10:11
  */
-public interface TencentCloudDescribeService {
+public interface TencentCloudRegionsService {
     /**
      * 查询可用区列表
      * @return

@@ -4,14 +4,14 @@ import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.cvm.v20170312.models.*;
 import com.ucr.vcener.common.CommonResult;
 import com.ucr.vcener.config.yunSDKConfig.TencentConfig;
-import com.ucr.vcener.tencentCloud.service.DescribeImagesService;
+import com.ucr.vcener.tencentCloud.service.TencentCloudImagesService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author ymn
  * @date 2020/11/27 17:56
  */
-public class DescribeImagesServiceImpl implements DescribeImagesService {
+public class TencentCloudImagesServiceImpl implements TencentCloudImagesService {
     @Autowired
     private TencentConfig tencentConfig;
 

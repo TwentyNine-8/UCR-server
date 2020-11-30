@@ -9,7 +9,7 @@ import java.util.List;
  * @author ymn
  * @date 2020/11/27 17:42
  */
-public interface DescribeDisasterRecoverGroupsService {
+public interface TencentCloudRecoverGroupsService {
     /**
      * 查询分散置放群组信息
      * 本接口 (DescribeDisasterRecoverGroups)用于查询分散置放群组信息。

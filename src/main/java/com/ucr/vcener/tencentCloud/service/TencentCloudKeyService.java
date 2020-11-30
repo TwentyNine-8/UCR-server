@@ -9,7 +9,7 @@ import java.util.List;
  * @author ymn
  * @date 2020/11/27 20:35
  */
-public interface DescribeKeyPairsService {
+public interface TencentCloudKeyService {
     /**
      * 查询密钥对列表
      * 本接口 (DescribeKeyPairs) 用于查询密钥对信息。

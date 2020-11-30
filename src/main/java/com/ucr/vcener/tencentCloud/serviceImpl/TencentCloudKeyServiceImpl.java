@@ -5,7 +5,7 @@ import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.cvm.v20170312.models.*;
 import com.ucr.vcener.common.CommonResult;
 import com.ucr.vcener.config.yunSDKConfig.TencentConfig;
-import com.ucr.vcener.tencentCloud.service.DescribeKeyPairsService;
+import com.ucr.vcener.tencentCloud.service.TencentCloudKeyService;
 import com.ucr.vcener.util.TencentUtil;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author ymn
  * @date 2020/11/27 20:36
  */
-public class DescribeKeyPairsServiceImpl implements DescribeKeyPairsService {
+public class TencentCloudKeyServiceImpl implements TencentCloudKeyService {
     @Autowired
     private TencentConfig tencentConfig;
 

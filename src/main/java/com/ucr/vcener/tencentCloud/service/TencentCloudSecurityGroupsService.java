@@ -9,7 +9,7 @@ import com.ucr.vcener.common.CommonResult;
  * @author ymn
  * @date 2020/11/27 20:50
  */
-public interface AssociateSecurityGroupsService {
+public interface TencentCloudSecurityGroupsService {
     /**
      * 绑定安全组
      * 本接口 (AssociateSecurityGroups) 用于绑定安全组到指定实例。

@@ -8,7 +8,7 @@ import com.ucr.vcener.common.CommonResult;
  * @author ymn
  * @date 2020/11/27 17:54
  */
-public interface DescribeImagesService {
+public interface TencentCloudImagesService {
     /**
      * 查看镜像列表
      * 本接口(DescribeImages) 用于查看镜像列表。

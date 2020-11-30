@@ -4,14 +4,14 @@ import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.cvm.v20170312.models.*;
 import com.ucr.vcener.common.CommonResult;
 import com.ucr.vcener.config.yunSDKConfig.TencentConfig;
-import com.ucr.vcener.tencentCloud.service.AssociateSecurityGroupsService;
+import com.ucr.vcener.tencentCloud.service.TencentCloudSecurityGroupsService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author ymn
  * @date 2020/11/27 20:50
  */
-public class AssociateSecurityGroupsImpl implements AssociateSecurityGroupsService {
+public class TencentCloudSecurityGroupsImpl implements TencentCloudSecurityGroupsService {
     @Autowired
     private TencentConfig tencentConfig;
 
