@@ -79,4 +79,55 @@ public interface DescribeImagesService {
      * https://cloud.tencent.com/document/api/213/15710
      */
     CommonResult ModifyImageSharePermission(ModifyImageSharePermissionRequest request);
+
+    /**
+     *同步镜像
+     *本接口（SyncImages）用于将自定义镜像同步到其它地区。
+     *
+     * 该接口每次调用只支持同步一个镜像。
+     * 该接口支持多个同步地域。
+     * 单个帐号在每个地域最多支持存在10个自定义镜像。
+     * @param request
+     * @return
+     *https://cloud.tencent.com/document/api/213/15711
+     */
+    CommonResult SyncImages(SyncImagesRequest request);
+
+    /**
+     * 修改镜像属性
+     * 本接口（ModifyImageAttribute）用于修改镜像属性。
+     *
+     * 已分享的镜像无法修改属性。
+     * 默认接口请求频率限制：10次/秒。
+     * @param request
+     * @return
+     * https://cloud.tencent.com/document/api/213/15713
+     */
+    CommonResult ModifyImageAttribute(ModifyImageAttributeRequest request);
+
+    /**
+     * 删除镜像
+     * 本接口（DeleteImages）用于删除一个或多个镜像。
+     *
+     * 当镜像状态为创建中和使用中时, 不允许删除。镜像状态可以通过DescribeImages获取。
+     * 每个地域最多只支持创建10个自定义镜像，删除镜像可以释放账户的配额。
+     * 当镜像正在被其它账户分享时，不允许删除。
+     * 默认接口请求频率限制：10次/秒。
+     * @param request
+     * @return
+     * https://cloud.tencent.com/document/api/213/15716
+     */
+    CommonResult DeleteImages(DeleteImagesRequest request);
+
+    /**
+     * 外部镜像导入
+     * 本接口(ImportImage)用于导入镜像，导入后的镜像可用于创建实例。
+     *
+     * 默认接口请求频率限制：10次/秒。
+     *
+     * @param request
+     * @return
+     * https://cloud.tencent.com/document/api/213/15717
+     */
+    CommonResult ImportImage(ImportImageRequest request);
 }

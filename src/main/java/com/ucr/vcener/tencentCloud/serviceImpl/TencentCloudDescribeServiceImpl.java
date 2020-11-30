@@ -47,13 +47,9 @@ public class TencentCloudDescribeServiceImpl implements TencentCloudDescribeServ
     @Override
     public CommonResult describeRegions() {
         DescribeRegionsRequest req = new DescribeRegionsRequest();
-        HashMap<String, Object> result = new HashMap<>(4);
         try {
             DescribeRegionsResponse describeRegionsResponse = tencentConfig.getCvmClient().DescribeRegions(req);
-            result.put("totalCount", describeRegionsResponse.getTotalCount());
-            result.put("RegionSet", describeRegionsResponse.getRegionSet());
-            result.put("requestId", describeRegionsResponse.getRequestId());
-            return CommonResult.ok(result);
+            return CommonResult.ok(describeRegionsResponse);
         } catch (TencentCloudSDKException e) {
             e.printStackTrace();
         }
