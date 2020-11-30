@@ -19,7 +19,7 @@ public class TencentAspect {
     @Autowired
     private TencentConfig tencentConfig;
 
-    @Pointcut("@annotation(com.ucr.vcener.tencentCloud.*)")
+    @Pointcut("execution(* com.ucr.vcener.tencentCloud..*(..))")
     public void tencentCut() {}
 
     /**

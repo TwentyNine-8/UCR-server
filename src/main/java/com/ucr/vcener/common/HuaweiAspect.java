@@ -19,7 +19,7 @@ public class HuaweiAspect {
     @Autowired
     private HuaweiConfig huaweiConfig;
 
-    @Pointcut("@annotation(com.ucr.vcener.huaweiCloud.*)")
+    @Pointcut("execution(* com.ucr.vcener.huaweiCloud..*(..))")
     public void huaweiCut() {}
 
     /**
@@ -28,6 +28,6 @@ public class HuaweiAspect {
     @Before("huaweiCut()")
     public void setHuaweiClient() {
         // TODO: 2020/11/27 查询华为云相关配置参数
-        huaweiConfig.setCvmClient("", "", "","");
+        huaweiConfig.setCvmClient("", "", "", "");
     }
 }

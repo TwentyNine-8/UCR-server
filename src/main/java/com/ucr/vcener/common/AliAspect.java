@@ -13,7 +13,7 @@ public class AliAspect {
     @Autowired
     private AlibabaConfig alibabaConfig;
 
-    @Pointcut("@annotation(com.ucr.vcener.alibabaCloud.*)")
+    @Pointcut("execution(* com.ucr.vcener.alibabaCloud..*(..))")
     public void aliCut() {}
 
     @Before("aliCut()")
