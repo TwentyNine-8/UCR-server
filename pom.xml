@@ -367,6 +367,34 @@
             <artifactId>aliyun-java-sdk-ecs</artifactId>
             <version>4.17.4</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.aliyun/aliyun-java-sdk-vpc-->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-vpc</artifactId>
+            <version>3.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-polardb</artifactId>
+            <version>1.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-drds</artifactId>
+            <version>4.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-r-kvstore</artifactId>
+            <version>2.1.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.aliyun/aliyun-java-sdk-rds -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-rds</artifactId>
+            <version>2.3.9</version>
+        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -381,17 +409,17 @@
         <dependency>
             <groupId>com.huaweicloud.sdk</groupId>
             <artifactId>huaweicloud-sdk-core</artifactId>
-            <version>[3.0.1-beta, 3.1.0-beta)</version>
+            <version>3.0.22-beta</version>
         </dependency>
         <dependency>
             <groupId>com.huaweicloud.sdk</groupId>
             <artifactId>huaweicloud-sdk-vpc</artifactId>
-            <version>[3.0.1-beta, 3.1.0-beta)</version>
+            <version>3.0.22-beta</version>
         </dependency>
         <dependency>
             <groupId>com.huaweicloud.sdk</groupId>
             <artifactId>huaweicloud-sdk-ecs</artifactId>
-            <version>[3.0.1-beta, 3.1.0-beta)</version>
+            <version>3.0.22-beta</version>
         </dependency>
     </dependencies>
 

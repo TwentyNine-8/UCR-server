@@ -21,7 +21,6 @@ public class HuaweiConfig {
 private EcsClient client;
     /**
      * 获取华为云连接对象
-     *
      * @param ak  华为云账号 Access Key
      * @param sk  华为云账号 Secret Access Key
      * @param projectId 云服务所在项目 ID
