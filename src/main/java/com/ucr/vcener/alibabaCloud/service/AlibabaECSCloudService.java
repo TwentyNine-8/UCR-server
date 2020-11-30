@@ -85,6 +85,21 @@ public interface AlibabaECSCloudService {
      */
     CommonResult ModifyInstance(String instancenId);
 
-    //TODO 创建与管理无保护期抢占式实例
-    CommonResult NoDurationSpotSample();
+    /**
+     * 创建与管理无保护期抢占式实例
+     * public static final String ISO8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+     * public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+     * public static final String GMT = "GMT";
+     * static String regionNo = "cn-beijing";
+     * static String izNo = "cn-beijing-h";
+     * static String instanceType = "ecs.g5.8xlarge";
+     */
+    CommonResult NoDurationSpotSample(
+        String ISO8601_DATE_FORMAT,
+        String DATE_FORMAT,
+        String GMT,
+        String regionNo,
+        String izNo,
+        String instanceType
+    );
 }

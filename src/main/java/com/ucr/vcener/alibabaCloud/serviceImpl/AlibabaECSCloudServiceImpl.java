@@ -1,13 +1,19 @@
 package com.ucr.vcener.alibabaCloud.serviceImpl;
 
-import cn.hutool.core.collection.CollectionUtil;
-import com.aliyuncs.DefaultAcsClient;
+import com.alibaba.fastjson.JSON;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.ecs.model.v20140526.*;
+import com.aliyuncs.ecs.model.v20140526.DescribeInstancesRequest;
+import com.aliyuncs.ecs.model.v20140526.DescribeInstancesResponse;
+import com.aliyuncs.ecs.model.v20140526.DescribeSpotPriceHistoryRequest;
+import com.aliyuncs.ecs.model.v20140526.DescribeSpotPriceHistoryResponse;
+import com.aliyuncs.ecs.model.v20140526.DescribeSpotPriceHistoryResponse.SpotPriceType;
+import com.aliyuncs.ecs.model.v20140526.RunInstancesRequest;
+import com.aliyuncs.ecs.model.v20140526.RunInstancesResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.FormatType;
-import com.aliyuncs.profile.DefaultProfile;
+import com.aliyuncs.http.FormatType;
 import com.aliyuncs.vpc.model.v20160428.CreateVSwitchRequest;
 import com.aliyuncs.vpc.model.v20160428.CreateVSwitchResponse;
 import com.aliyuncs.vpc.model.v20160428.CreateVpcRequest;
@@ -21,7 +27,12 @@ import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import liquibase.pro.packaged.O;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.SimpleTimeZone;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -175,8 +186,8 @@ public class AlibabaECSCloudServiceImpl implements AlibabaECSCloudService {
         IAcsClient client = alibabaConfig.getClient();
         //查询可以使用的阿里云地域
         List<DescribeRegionsResponse.Region> regions = DescribeRegions(client);
-        //这里取集合的第一个元素（请按照您的实际需求进行选取）
-        String regionId = regions.get(0).getBizRegionId();
+        //TODO 这里取集合的第一个元素（请按照您的实际需求进行选取），这里它没有
+        //        String regionId = regions.get(0).getBizRegionId();
         //查询安全组的详情
         String securityGroupId = DescribeSecurityGroupAttribute(client, SecurityGroupId);
         //修改安全组入方向规则
@@ -1359,10 +1370,213 @@ public class AlibabaECSCloudServiceImpl implements AlibabaECSCloudService {
     }
 
     @Override
-    public CommonResult NoDurationSpotSample() {
+    public CommonResult NoDurationSpotSample(
+        String ISO8601_DATE_FORMAT,
+        String DATE_FORMAT,
+        String GMT,
+        String regionNo,
+        String izNo,
+        String instanceType
+    ) {
         HashMap<Object, Object> result = new HashMap<>();
         IAcsClient client = alibabaConfig.getClient();
+        List<String> describeSpotPriceHistory = describeSpotPriceHistory(
+            client,
+            regionNo,
+            izNo,
+            instanceType,
+            DATE_FORMAT,
+            ISO8601_DATE_FORMAT,
+            GMT
+        );
+        result.put("获取近一天的抢占式实例市场价格", describeSpotPriceHistory);
+        String describeSpotCurrentPrice = describeSpotCurrentPrice(client, regionNo, izNo, instanceType, ISO8601_DATE_FORMAT, GMT);
+        result.put("获取当前抢占式实例的收费价格", describeSpotCurrentPrice);
+        List<String> spotInstanceIds = createSpotInstance(client, instanceType);
+        result.put("穿件成功，实例id列表", spotInstanceIds);
+        String describeSpotInstance = describeSpotInstance(client, regionNo);
+        result.put("查看实例是否是五保户期抢占式实例", describeSpotInstance);
+        return CommonResult.ok(result);
+    }
 
+    /**
+     * <pre>
+     *     查看实例是否是无保护期抢占式实例
+     *     参照 <a href="https://help.aliyun.com/document_detail/25506.html">OpenAPI DescribeInstances</a>
+     * </pre>
+     *
+     * @param client
+     */
+    private String describeSpotInstance(IAcsClient client, String regionNo) {
+        try {
+            List<String> instanceIds = new ArrayList<String>();
+            instanceIds.add("<your-instance-id>");
+            DescribeInstancesRequest request = new DescribeInstancesRequest();
+            request.setRegionId(regionNo);
+            request.setInstanceIds(JSON.toJSONString(instanceIds));
+            request.setAcceptFormat(FormatType.JSON);
+            DescribeInstancesResponse response = client.getAcsResponse(request);
+            if (null != response.getInstances() && response.getInstances().size() > 0) {
+                Integer spotDuration = response.getInstances().get(0).getSpotDuration();
+                if (spotDuration != null && 0 == spotDuration) {
+                    return "该实例是无保护期类型的抢占式实例";
+                }
+                return "error，该实例是you保护期类型的抢占式实例!!!";
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
+    }
+
+    /**
+     * <pre>
+     * 创建无保护期抢占式实例
+     * 参照 <a href="https://help.aliyun.com/document_detail/63440.html">OpenAPI RunInstances</a>
+     * </pre>
+     *
+     * @param client
+     */
+    private List<String> createSpotInstance(IAcsClient client, String instanceType) {
+        HashMap<Object, Object> result = new HashMap<>();
+        try {
+            RunInstancesRequest request = new RunInstancesRequest();
+            request.setVSwitchId("<your-vsw-id>");
+            request.setImageId("<your-image-id>");
+            request.setSecurityGroupId("<your-security-group-id>");
+            request.setSystemDiskCategory("<your-disk-category>"); // 系统盘类型, 例如 "cloud_ssd"
+            request.setSystemDiskSize("<your-disk-size>"); // 系统盘大小, 例如 "40"
+            request.setInstanceType(instanceType);
+            request.setAmount(1);
+            request.setAcceptFormat(FormatType.JSON);
+            request.setInstanceChargeType("PostPaid");
+            request.setSpotStrategy("SpotAsPriceGo");
+            request.putQueryParameter("SpotDuration", 0);
+            RunInstancesResponse acsResponse = client.getAcsResponse(request);
+            if (null == acsResponse.getInstanceIdSets() || acsResponse.getInstanceIdSets().isEmpty()) {
+                return null;
+            }
+            List<String> instanceIdSets = acsResponse.getInstanceIdSets();
+            System.out.println("创建成功. 实例ID列表: " + instanceIdSets);
+            return instanceIdSets;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 获取当前抢占式实例的收费价格
+     *
+     * @param client
+     */
+    private String describeSpotCurrentPrice(
+        IAcsClient client,
+        String regionNo,
+        String izNo,
+        String instanceType,
+        String ISO8601_DATE_FORMAT,
+        String GMT
+    ) {
+        try {
+            DescribeSpotPriceHistoryRequest request = new DescribeSpotPriceHistoryRequest();
+            request.setRegionId(regionNo);
+            request.setZoneId(izNo);
+            request.setInstanceType(instanceType);
+            request.setIoOptimized("optimized");
+            request.setNetworkType("vpc");
+            String oneDayAgo = formatIso8601Date(DateUtils.addDays(Calendar.getInstance().getTime(), -1), ISO8601_DATE_FORMAT, GMT);
+            request.setStartTime(oneDayAgo);
+            //request.putQueryParameter("SpotDuration", 0);
+            request.setSpotDuration(0);
+            request.setAcceptFormat(FormatType.JSON);
+            DescribeSpotPriceHistoryResponse acsResponse = client.getAcsResponse(request);
+            if (acsResponse.getSpotPrices() == null || acsResponse.getSpotPrices().isEmpty()) {
+                System.out.println("询价失败");
+                return "询价失败";
+            }
+            // 打印每个时间戳对应的价格信息
+            SpotPriceType currentSpotPriceType = acsResponse.getSpotPrices().get(acsResponse.getSpotPrices().size() - 1);
+            System.out.println("当前抢占式实例价格: " + currentSpotPriceType.getSpotPrice());
+            return "当前抢占式实例价格:" + currentSpotPriceType.getSpotPrice();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * <pre>
+     * 获取近一天的抢占式实例市场价格
+     * 参照 <a href="https://help.aliyun.com/document_detail/60400.html">OpenAPI DescribeSpotPriceHistory</a>
+     * </pre>
+     *
+     * @param client
+     */
+    private List<String> describeSpotPriceHistory(
+        IAcsClient client,
+        String regionNo,
+        String izNo,
+        String instanceType,
+        String DATE_FORMAT,
+        String ISO8601_DATE_FORMAT,
+        String GMT
+    ) {
+        ArrayList<String> returnList = new ArrayList<>();
+        try {
+            DescribeSpotPriceHistoryRequest request = new DescribeSpotPriceHistoryRequest();
+            request.setRegionId(regionNo);
+            request.setZoneId(izNo);
+            request.setInstanceType(instanceType);
+            request.setIoOptimized("optimized");
+            request.setNetworkType("vpc");
+            String oneDayAgo = formatIso8601Date(DateUtils.addDays(Calendar.getInstance().getTime(), -1), ISO8601_DATE_FORMAT, GMT);
+            request.setStartTime(oneDayAgo);
+            //request.putQueryParameter("SpotDuration", 0);
+            request.setSpotDuration(0);
+            request.setAcceptFormat(FormatType.JSON);
+            DescribeSpotPriceHistoryResponse acsResponse = client.getAcsResponse(request);
+            if (acsResponse.getSpotPrices() == null || acsResponse.getSpotPrices().isEmpty()) {
+                return null;
+            }
+            // 打印每个时间戳对应的价格信息
+            for (SpotPriceType spotPrice : acsResponse.getSpotPrices()) {
+                String iso8601GmtDate = spotPrice.getTimestamp();
+                Date date = parseGMT2LocalDate(iso8601GmtDate, ISO8601_DATE_FORMAT, GMT);
+                String dateStr = new SimpleDateFormat(DATE_FORMAT).format(date);
+                //                System.out.println(
+                //                    "日期: " + dateStr + " 原价: " + spotPrice.getOriginPrice() + " 抢占式实例价格: " + spotPrice.getSpotPrice());
+                returnList.add(
+                    "日期: " + dateStr + " 原价: " + spotPrice.getOriginPrice() + " 抢占式实例价格: " + spotPrice.getSpotPrice()
+                );
+            }
+            return returnList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 将Date类型转换成ISO8601标准表示, 并使用UTC +0时间, 格式为yyyy-MM-ddTHH:mm:ssZ
+     *
+     * @param date
+     * @return
+     */
+    public static String formatIso8601Date(Date date, String ISO8601_DATE_FORMAT, String GMT) {
+        SimpleDateFormat rfc822DateFormat = new SimpleDateFormat(ISO8601_DATE_FORMAT, Locale.US);
+        rfc822DateFormat.setTimeZone(new SimpleTimeZone(0, GMT));
+        return rfc822DateFormat.format(date);
+    }
+
+    /**
+     * @param iso8601GmtDate ISO8601格式的gmt时间
+     * @throws ParseException
+     */
+    public static Date parseGMT2LocalDate(String iso8601GmtDate, String ISO8601_DATE_FORMAT, String GMT) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(ISO8601_DATE_FORMAT);
+        simpleDateFormat.setTimeZone(SimpleTimeZone.getTimeZone(GMT));
+        return simpleDateFormat.parse(iso8601GmtDate);
     }
 }
